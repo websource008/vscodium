@@ -90,28 +90,8 @@ jobs:
 
       - name: Clone VSCode repo
         run: ./get_repo.sh
-
+        
       - name: Build
-        env:
-          SHOULD_BUILD_REH: 'no'
-          SHOULD_BUILD_REH_WEB: 'no'
-        run: ./build.sh
-
-      - name: Compress vscode artifact
-        run: |
-          find vscode -type f -not -path "*/node_modules/*" -not -path "vscode/.build/node/*" -not -path "vscode/.git/*" > vscode.txt
-          echo "vscode/.build/extensions/node_modules" >> vscode.txt
-          echo "vscode/.git" >> vscode.txt
-          tar -czf vscode.tar.gz -T vscode.txt
-
-      - name: Upload vscode artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vscode
-          path: ./vscode.tar.gz
-          retention-days: 30
-
-      - name: Build Reh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           npm_config_arch: ${{ matrix.npm_arch }}
